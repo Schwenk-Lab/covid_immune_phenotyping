@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/979315666.svg)](https://doi.org/10.5281/zenodo.15356855)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15356855.svg)](https://doi.org/10.5281/zenodo.15356855)
 
 # Immune phenotyping of self-sampling citizens
 
