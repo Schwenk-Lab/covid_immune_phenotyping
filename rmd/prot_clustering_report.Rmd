@@ -1,0 +1,85 @@
+---
+title: "Proteomics clustering"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(stringsAsFactors = F)
+```
+
+# Description
+
+> Clustering of proteomics data based on WGCNA.
+
+# WGCNA
+
+```{r}
+tar_load(prot_wgcna)
+tar_load(wgcna_vis)
+```
+
+## Power plots for WGCNA
+
+```{r}
+prot_wgcna$power_plots
+```
+
+## Module eigengene (ME) adjacency
+
+```{r}
+wgcna_vis$me_adj
+```
+
+# Module sizes and overlapping proteins
+
+```{r, fig.height=10, fig.width=7}
+tar_load(wgcna_prot_overlap)
+wgcna_prot_overlap$plt
+```
+
+
+# Proteoclusters
+
+```{r}
+tar_load(prot_clust)
+```
+
+## Stability
+
+```{r}
+prot_clust$stab_dat
+```
+
+```{r}
+tar_load(prot_clust_char)
+```
+
+## Cluster characteristics
+
+```{r, fig.show='hold', out.width='33%'}
+for (i in seq_along(prot_clust_char$plot)) {print(prot_clust_char$plot[[i]])}
+```
+
+## Cluster ME levels
+
+```{r, fig.height=7, fig.width=5}
+prot_clust_char$heatmap
+```
+
+## Table
+
+```{r}
+prot_clust_char$table
+```
+
+
+# Session information
+
+```{r}
+sessionInfo()
+```

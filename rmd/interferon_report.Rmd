@@ -1,0 +1,95 @@
+---
+title: "Interferon report"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(stringsAsFactors = F)
+```
+
+# Description
+
+> Summary of anti-interferon AAbs. 
+
+Using `r ifelse(low_conc_s, "low", "normal")` concentration S.
+
+# Tables
+
+```{r}
+tar_load(ifn_table)
+kable(ifn_table)
+```
+
+# Boxplots
+
+```{r}
+tar_load(ifn_vs_seroclust)
+
+ifn_vs_seroclust$boxplots
+```
+
+```{r}
+ggsave(paste0("../results/interferon_analysis/",
+              format(Sys.time(), "%Y-%m-%d_%H%M%S"),
+              "_interferon_boxplots.pdf"),
+       ifn_vs_seroclust$boxplots, height = 7, width = 12)
+```
+
+# Barplots
+
+```{r}
+ifn_vs_seroclust$barplots
+```
+
+```{r}
+ggsave(paste0("../results/interferon_analysis/",
+              format(Sys.time(), "%Y-%m-%d_%H%M%S"),
+              "_interferon_cluster_barplots.pdf"),
+       ifn_vs_seroclust$barplots, height = 7, width = 12)
+```
+
+# Associations with cohort variables
+
+```{r}
+tar_load(ifn_assoc)
+```
+
+```{r}
+pdf(file = paste0("../results/interferon_analysis/",
+                  format(Sys.time(), "%Y-%m-%d_%H%M%S"),
+                  "_interferon_barplots.pdf"),
+    onefile = T, height = 7, width = 12)
+for (i in c("age_group", "sex", "symptoms", "N+", "S+")) {
+  if (i == "age_group") {print(ifn_assoc[[i]]$plot + theme(axis.text.x = element_text(angle = 45, hjust = 1)))}
+  else {print(ifn_assoc[[i]]$plot)}
+}
+dev.off()
+```
+
+```{r}
+tar_load(ifn_assoc_summary)
+
+ifn_assoc_summary$plot
+```
+
+```{r}
+kable(ifn_assoc_summary$table)
+
+write_csv(ifn_assoc_summary$table, paste0("../results/interferon_analysis/",
+                                          format(Sys.time(), "%Y-%m-%d_%H%M%S"),
+                                          "_interferon_summary.csv"))
+```
+
+
+
+# Session information
+
+```{r}
+sessionInfo()
+```
+

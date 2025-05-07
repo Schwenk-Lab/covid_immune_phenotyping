@@ -1,0 +1,64 @@
+---
+title: "Multianalyte serology report"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(stringsAsFactors = F)
+```
+
+# Description
+
+> Summary of multianalyte serology. 
+
+Using `r ifelse(low_conc_s, "low", "normal")` concentration S.
+
+# Tables
+
+```{r}
+tar_load(serol_table)
+kable(serol_table)
+```
+
+# Plots
+
+```{r}
+tar_load(serol_boxplot)
+
+abs_to_plot <- c("anti_s1s2", "anti_nc", "anti_rbd", "EBNA1") %>%
+  setNames(rename_serol(.) %>% paste0(" [AU]"))
+
+selected_boxplots <- imap(abs_to_plot, \(value, name) {
+  serol_boxplot[[value]] + labs(x = NULL, y = name, fill = "Region")
+}) %>%
+  wrap_plots(., nrow = 1, guides = "collect") /
+  # Add common x-axis title
+  (ggplot(data.frame(a = "Self-reported immune category", x = 1, y = 1)) +
+  geom_text(aes(x = x, y = y, label = a), size = 4) +
+  theme_void() +
+  coord_cartesian(clip = "off")) +
+  plot_layout(heights = c(25, 1))
+```
+
+```{r, fig.height=2.5, fig.width=11}
+selected_boxplots
+```
+
+```{r}
+ggsave(paste0("../results/multianalyte_serology/",
+              format(Sys.time(), "%Y-%m-%d_%H%M%S"),
+              "_selected_boxplots.pdf"),
+       selected_boxplots, height = 2.5, width = 11)
+```
+
+
+# Session information
+
+```{r}
+sessionInfo()
+```

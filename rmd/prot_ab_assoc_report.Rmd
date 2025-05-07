@@ -1,0 +1,46 @@
+---
+title: "Protein-antibody associations"
+author: "Leo Dahl"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(stringsAsFactors = F)
+```
+
+# Description
+
+> Looking at protein-antibody linear associations.
+
+```{r}
+tar_load(prot_ab_assoc)
+tar_load(prot_corr)
+```
+
+```{r}
+datatable(prot_ab_assoc$assoc) %>%
+  formatSignif(columns = which(sapply(prot_ab_assoc$assoc, class) == "numeric"), digits = 3)
+```
+
+Heatmap of associations with FDR adjustment
+
+```{r, fig.height=10, fig.width=8.5}
+prot_ab_assoc$heatmap_fdr
+```
+
+Heatmap without adjustment (nominal p-values)
+
+```{r, fig.height=10, fig.width=8.5}
+prot_ab_assoc$heatmap_p
+```
+
+# Session information
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,63 @@
+---
+title: "Proteomics lasso analysis"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(stringsAsFactors = F)
+```
+
+# Description
+
+> Lasso analysis of proteomics data to predict seroclusters.
+
+Using `r ifelse(low_conc_s, "low", "normal")` concentration S.
+
+```{r}
+tar_load(prot_lasso_prop)
+```
+
+Region-agnostic 70:30 split.
+
+```{r}
+prot_lasso_prop$preprocessing_steps
+prot_lasso_prop$metrics
+prot_lasso_prop$roc_curve
+prot_lasso_prop$conf_plot
+```
+
+
+```{r, fig.width = 9, fig.height = 7}
+wrap_plots(prot_lasso_prop$vip, guides = "collect") & theme(axis.title.y = element_blank())
+```
+
+
+```{r}
+prot_lasso_prop$varimp %>%
+  filter(importance > 0) %>%
+  datatable() %>% formatSignif(columns = c(3, 5), digits = 3)
+```
+
+Predicting sex, age, and region (proportion split)
+
+```{r}
+tar_load(prot_lasso_others)
+lapply(prot_lasso_others, \(x) {
+  list("metrics" = x$metrics,
+       "roc_curve" = x$roc_curve,
+       "confusion_matrix" = x$conf_plot)
+})
+```
+
+
+
+# Session information
+
+```{r}
+sessionInfo()
+```

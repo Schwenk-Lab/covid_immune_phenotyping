@@ -1,0 +1,76 @@
+---
+title: "Cohort demographics"
+author: "Leo Dahl"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(stringsAsFactors = F)
+```
+
+# Cohort demographics
+
+## Tables
+
+```{r}
+tar_load(demographics_tables)
+```
+
+### By region
+
+```{r}
+demographics_tables$by_region
+```
+
+### By age group
+
+```{r}
+demographics_tables$by_age
+```
+
+## Demographics barplots
+
+```{r, fig.width=11, fig.height=2.5}
+tar_load(demographics_barplots)
+
+wrap_plots(c(demographics_barplots$age_sex,
+             demographics_barplots$inf_vacc),
+           nrow = 1, guides = "collect")
+```
+
+## Timing barplots
+
+```{r}
+tar_load(timing_barplots)
+timing_barplots
+```
+
+
+```{r}
+barplots_combined <- wrap_plots(c(
+  demographics_barplots$age_sex,
+  demographics_barplots$inf_vacc),
+  nrow = 1, guides = "collect") /
+  (timing_barplots) +
+  plot_layout(heights = c(1, 3))
+```
+
+```{r}
+ggsave(paste0("../results/cohort_demographics/",
+              format(Sys.time(), "%Y-%m-%d_%H%M%S"),
+              "_demographics_barplots.pdf"),
+       barplots_combined, height = 10, width = 12)
+```
+
+
+# Session information
+
+```{r}
+sessionInfo()
+```
+

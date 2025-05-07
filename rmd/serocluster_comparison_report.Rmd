@@ -1,0 +1,98 @@
+---
+title: "Cluster comparison"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(stringsAsFactors = F)
+```
+
+# Description
+
+> Plots comparing clusters from questionnaire (immune groups) and hierarchical clustering. 
+
+Using `r ifelse(low_conc_s, "low", "normal")` concentration S.
+
+# Tables
+
+```{r}
+tar_load(seroclust_table)
+seroclust_table
+```
+
+# Plots
+
+```{r, fig.height=3, fig.width=9}
+tar_load(seroclust_hm)
+seroclust_hm$hcl
+```
+
+```{r, fig.height=3, fig.width=9}
+seroclust_hm$qst
+```
+
+## Serocluster comparisons
+
+```{r, fig.width=6, fig.height=4, warning=FALSE}
+tar_load(seroclust_upset)
+seroclust_upset
+```
+
+```{r, fig.height=7, fig.width=8}
+tar_load(seroclust_boxplt)
+seroclust_boxplt
+```
+
+```{r, fig.height=3, fig.width=12, warning=F}
+tar_load(seroclust_response)
+# seroclust_response$questionnaire
+```
+
+```{r, fig.height=3, fig.width=9, warning=F}
+seroclust_response$hierarchical
+```
+
+## Protein-serocluster associations
+
+Kruskal-Wallis p-values
+
+```{r, fig.height=4, fig.width=4}
+tar_load(prot_seroclust_plts)
+tar_load(prot_seroclust_boxplts)
+prot_seroclust_plts$qq_plots
+```
+
+Wilcoxon rank-sum test p-values, pairwise comparisons of serocluster protein levels
+
+```{r, fig.height=7, fig.width=9}
+prot_seroclust_plts$wilcox_hm
+```
+
+Boxplots are saved in a pdf file: **`r prot_seroclust_boxplts`**
+
+
+## Mismatching samples
+
+```{r}
+tar_load(seroclust_mismatch)
+```
+
+```{r}
+seroclust_mismatch$boxplots
+```
+
+```{r, fig.height=4, fig.width=10}
+seroclust_mismatch$barplots
+```
+
+
+# Session information
+
+```{r}
+sessionInfo()
+```

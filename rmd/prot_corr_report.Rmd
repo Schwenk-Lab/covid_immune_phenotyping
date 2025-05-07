@@ -1,0 +1,54 @@
+---
+title: "Protein correlations"
+author: "Leo Dahl"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+options(stringsAsFactors = F)
+```
+
+# Description
+
+> Plots Looking at correlation between technologies for overlapping proteins.
+
+```{r}
+tar_load(prot_corr)
+```
+
+Number of overlapping proteins: **`r prot_corr$n_prot`**  
+Number of overlapping samples: **`r prot_corr$n_samp`**
+
+```{r}
+prot_corr$venn
+```
+
+```{r}
+prot_corr$barplt
+```
+
+```{r}
+ggsave(paste0("../results/protein_correlation/",
+              format(Sys.time(), "%Y-%m-%d_%H%M%S"),
+              "_correlation_figure.pdf"),
+       prot_corr$venn + prot_corr$barplt + plot_layout(widths = c(1.5, 1)),
+       height = 4, width = 12)
+```
+
+
+```{r}
+prot_corr$scatterplt
+```
+
+Scatter plots per protein comparing the values from each technology can be found in **`r prot_corr$prot_scatter_file`**.
+
+# Session information
+
+```{r}
+sessionInfo()
+```
