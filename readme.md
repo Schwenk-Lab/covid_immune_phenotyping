@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/979315666.svg)](https://doi.org/10.5281/zenodo.15356855)
+
 # Immune phenotyping of self-sampling citizens
 
 Analysis and visualisation code accompanying *Immune phenotyping of self-sampling citizens*. Analysis was done using R 4.3.2.
